@@ -9,26 +9,30 @@ use Illuminate\Support\Str;
 use App\Models\Employees;
 use App\Models\project;
 use App\Models\Task;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
 class AdminController extends Controller
 {
-    public function create(){
-        
-        $password = Str::password(12, true, true, true, false);
-        $employees = DB::table('employees')->pluck('email');
-   
-            foreach ($employees as $email) {
-                Employees::firstOrCreate(
-                    ['email' => $email],
-                    [
-                        'name' => 'Данилл',
-                        'email' => 'daniil.kondratev.37@gmail.com',
-                        'role' => 'executor',
-                        'password' => $password, 
-                    ]
-                );
-               
-    } dump($employees);
+    public function create(Request $request){
+
+        $validate = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:employees',
+            'role' => 'required',
+            'password' => 'required',
+        ]);
+            
+        Employees::create([
+            'name' => $request->name, 
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make($request->password),
+        ]);        
+        dd('ловаыва');
+        return view('test');
+        return ['token' => $employees->createToken($request->aa)->plainTextToken];
+    
 }
     public function update_role(){
         $employees = Employees::all();

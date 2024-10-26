@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class employees extends Model
+use Laravel\Sanctum\HasApiTokens;
+class Employees extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $table = 'employees';
 
