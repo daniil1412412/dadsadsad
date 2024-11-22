@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SupervisorController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -25,10 +26,16 @@ use App\Models\Task;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('/employees', [AdminController::class, 'create']);
+Route::post('/employees', [AdminController::class, 'regist']);
 Route::view('/employee', 'test');
 Route::get('/task', [TaskController::class, 'task']);
-Route::get('/project', [ProjectController::class, 'project']);
-
-
-require __DIR__.'/auth.php';
+Route::get('/all', [ProjectController::class, 'project']);
+Route::post('/project', [SupervisorController::class, 'create_project']);
+Route::view('/projects', 'prjct');
+Route::post('/update_role/role/{employee_id}', [AdminController::class, 'update_role']); 
+Route::view('/update/role/{employee_id}', 'update_role');
+Route::view('/login', 'login');
+Route::post('/login/dd', [EmployeesController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [EmployeesController::class, 'logout']);
+});

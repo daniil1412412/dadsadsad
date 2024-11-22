@@ -14,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class AdminController extends Controller
 {
-    public function create(Request $request){
+    public function regist(Request $request){
 
         $validate = $request->validate([
             'name' => 'required',
@@ -31,13 +31,16 @@ class AdminController extends Controller
         ]);        
         dd('ловаыва');
         return view('test');
-        return ['token' => $employees->createToken($request->aa)->plainTextToken];
+        return ['token' => $employees->createToken($request->password)->plainTextToken];
     
 }
-    public function update_role(){
-        $employees = Employees::all();
-        $employees->update([
-            'role' => ''
-        ]);
-    }
+public function update_role(Request $request, $employee_id) {
+    $pp = Employees::find($employee_id);
+    $pp->update([
+        'role' => $request->role,
+    ]);
+    return view('update_role');
+    return ['token' => $employees->createToken($request->role)->plainTextToken];
+}
+
 }
